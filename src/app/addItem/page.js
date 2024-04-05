@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateProduct() {
 	const [formData, setFormData] = useState({
@@ -8,6 +9,22 @@ export default function CreateProduct() {
 		price: "",
 		image: null,
 	});
+	const [token, setToken] = useState(null);
+	const router = useRouter();
+	function onLogout() {
+		setToken(null);
+		localStorage.removeItem("merchantToken");
+	}
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			const storedToken = localStorage.getItem("merchantToken");
+			if (storedToken) {
+				setToken(storedToken);
+			} else {
+				router.push("/merchantLogin");
+			}
+		}
+	}, []);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -28,18 +45,25 @@ export default function CreateProduct() {
 		postData.append("image", formData.image);
 
 		try {
-			const response = await fetch("/api/upload", {
-				method: "POST",
-				body: postData,
-			});
+			if (token) {
+				const response = await fetch("/api/upload", {
+					method: "POST",
+					body: postData,
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
 
-			if (!response.ok) {
-				throw new Error("Failed to create product");
+				if (!response.ok) {
+					throw new Error("Failed to create product");
+				}
+
+				const data = await response.json();
+				console.log("Product created successfully:", data);
+				// Reset form fields or provide feedback to the user
+			} else {
+				router.push("/login");
 			}
-
-			const data = await response.json();
-			console.log("Product created successfully:", data);
-			// Reset form fields or provide feedback to the user
 		} catch (error) {
 			console.error("Error creating product:", error.message);
 			// Handle errors or provide feedback to the user
@@ -48,6 +72,7 @@ export default function CreateProduct() {
 
 	return (
 		<div>
+			<button onClick={() => onLogout()}>Logout</button>
 			<h1>Create Product</h1>
 			<form onSubmit={handleSubmit}>
 				<div>

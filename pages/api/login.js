@@ -30,6 +30,7 @@ export default async function handler(req, res) {
 				token: token,
 				userId: user._id,
 				userEmail: user.email,
+				role: "user",
 				message: "Login successful",
 			});
 		} catch (error) {
