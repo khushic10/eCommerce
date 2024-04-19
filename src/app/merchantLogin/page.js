@@ -28,6 +28,7 @@ export default function Login() {
 
 			const data = await res.json();
 			localStorage.setItem("merchantToken", data.token);
+			localStorage.setItem("role", data.role);
 			router.push("/addItem");
 		} catch (error) {
 			setError(error.message);
@@ -86,14 +87,6 @@ export default function Login() {
 							>
 								Login
 							</button>
-						</div>
-						<div>
-							Don't have an account yet?{" "}
-							<Link href="/register">
-								<span className="cursor-pointer text-indigo-600 font-semibold">
-									Sign Up
-								</span>
-							</Link>
 						</div>
 					</form>
 				</div>

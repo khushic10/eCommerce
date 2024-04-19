@@ -2,19 +2,24 @@ import { connectToDatabase } from "@/util/db";
 import { Cart } from "@/util/model/Cart";
 import jwt from "jsonwebtoken";
 
-async function verifyToken(authorizationHeader) {
+async function verifyToken(authorizationHeader, res) {
 	if (!authorizationHeader) {
-		throw new Error("Authorization header missing");
+		res.status(403).json({ error: "Authorization header missing" });
 	}
 	const token = authorizationHeader.replace("Bearer ", "").trim();
 	if (!token) {
-		throw new Error("TokenNull");
+		res.status(403).json({ error: "Token is null or empty" });
 	}
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		return decoded.userId;
+		console.log(decoded);
+		if (decoded.role !== "user") {
+			res.status(403).json({ error: "Unauthorized access" });
+		} else {
+			return decoded.userId;
+		}
 	} catch (error) {
-		throw new Error("Invalid token");
+		res.status(403).json({ error: "Invalid Token" });
 	}
 }
 
@@ -22,7 +27,7 @@ export default async function handler(req, res) {
 	try {
 		await connectToDatabase();
 
-		const userId = await verifyToken(req.headers.authorization);
+		const userId = await verifyToken(req.headers.authorization, res);
 
 		if (req.method === "GET") {
 			const cart = await Cart.findOne({ user: userId }).populate(
@@ -83,10 +88,16 @@ export default async function handler(req, res) {
 			if (itemIndex === -1) {
 				return res.status(404).json({ error: "Item not found in cart" });
 			}
-
 			cart.items.splice(itemIndex, 1);
 			await cart.save();
-			return res.status(200).json({ message: "Item deleted successfully" });
+			let NoOfItems = 0;
+			let TotalCost = 0;
+			cart.items.forEach((item) => {
+				NoOfItems += item.quantity;
+				TotalCost += item.quantity * item.product.price;
+			});
+
+			return res.status(200).json({ cart, NoOfItems, TotalCost });
 		} else {
 			return res.status(405).json({ error: "Method not allowed" });
 		}

@@ -20,7 +20,11 @@ export default async function handler(req, res) {
 
 			// User authenticated successfully
 			const token = sign(
-				{ merchantId: merchant._id, email: merchant.email },
+				{
+					merchantId: merchant._id,
+					email: merchant.email,
+					role: "merchant",
+				},
 				process.env.JWT_SECRET,
 				{
 					expiresIn: "100y", // Adjust token expiration as needed

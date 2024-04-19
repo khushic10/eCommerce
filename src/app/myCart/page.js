@@ -57,11 +57,12 @@ export default function Page() {
 				if (!res.ok) {
 					console.log("error");
 					throw new Error("Error deleting item from cart");
+				} else {
+					alert("Item has been successfully deleted from the cart.");
+					const data = await res.json();
+					setProducts(data);
+					fetchData();
 				}
-				setProducts(
-					products.filter((product) => product.product._id !== productId)
-				);
-				alert("Item has been successfully deleted from the cart.");
 			}
 		} catch (error) {
 			console.log(error.message);
@@ -70,15 +71,15 @@ export default function Page() {
 
 	return (
 		<div>
-			<div className="grid grid-cols-4">
-				<Link href="/" className="col-span-2">
+			<div className="grid grid-cols-5">
+				<Link href="/" className="col-span-2 ml-8">
 					<img
 						src="http://localhost:3000/img/Logo.png"
 						alt="Logo"
-						className="h-32 "
+						className="h-28 "
 					/>
 				</Link>
-				<div className=" col-span-2">
+				<div className="bg-violet-200 rounded-2xl p-2 col-span-3 mr-4">
 					<Navbar />
 				</div>
 			</div>
@@ -90,13 +91,15 @@ export default function Page() {
 							products.cart.items &&
 							products.cart.items.map((product) => (
 								<div className=" h-96" key={product.product._id}>
-									<div className=" h-72">
-										<img
-											className=" rounded-2xl h-full w-full"
-											src={product.product.image}
-											alt=""
-										/>
-									</div>
+									<Link href={`/${product.product._id}`}>
+										<div className=" h-72">
+											<img
+												className=" rounded-2xl h-full w-full"
+												src={product.product.image}
+												alt=""
+											/>
+										</div>
+									</Link>
 									<div className="flex justify-between ml-2 mr-2 mt-0.5">
 										<div>
 											<h2 className=" text-purple-900 text-sm">

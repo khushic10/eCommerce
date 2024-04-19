@@ -17,19 +17,24 @@ export const config = {
 };
 
 // Function to verify JWT token
-async function verifyToken(authorizationHeader) {
+async function verifyToken(authorizationHeader, res) {
 	if (!authorizationHeader) {
-		throw new Error("Authorization header missing");
+		res.status(403).json({ error: "Authorization header missing" });
 	}
 	const token = authorizationHeader.replace("Bearer ", "").trim();
+	console.log(token);
 	if (!token) {
-		throw new Error("Token is null or empty");
+		res.status(403).json({ error: "Token is null or empty" });
 	}
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		return decoded.userId;
+		if (decoded.role !== "merchant") {
+			res.status(403).json({ error: "Unauthorized access" });
+		} else {
+			return decoded.userId;
+		}
 	} catch (error) {
-		throw new Error("Invalid token");
+		res.status(403).json({ error: "Invalid Token" });
 	}
 }
 
@@ -41,7 +46,7 @@ export default async function handler(req, res) {
 			await connectToDatabase();
 
 			// Verify JWT token
-			const userId = await verifyToken(req.headers.authorization);
+			const userId = await verifyToken(req.headers.authorization, res);
 
 			// Handle file upload
 			upload.single("image")(req, res, async function (err) {

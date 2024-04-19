@@ -18,7 +18,9 @@ export default function CreateProduct() {
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const storedToken = localStorage.getItem("merchantToken");
-			if (storedToken) {
+			const storedRole = localStorage.getItem("role");
+			if (storedToken && storedRole === "merchant") {
+				console.log(storedRole);
 				setToken(storedToken);
 			} else {
 				router.push("/merchantLogin");
@@ -62,7 +64,7 @@ export default function CreateProduct() {
 				console.log("Product created successfully:", data);
 				// Reset form fields or provide feedback to the user
 			} else {
-				router.push("/login");
+				router.push("/merchantLogin");
 			}
 		} catch (error) {
 			console.error("Error creating product:", error.message);

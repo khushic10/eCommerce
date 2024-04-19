@@ -37,15 +37,15 @@ export default function Login() {
 
 	return (
 		<>
-			<div className="grid grid-cols-4">
-				<Link href="/" className="col-span-2">
+			<div className="grid grid-cols-5">
+				<Link href="/" className="col-span-2 ml-8">
 					<img
 						src="http://localhost:3000/img/Logo.png"
 						alt="Logo"
-						className="h-32 "
+						className="h-28 "
 					/>
 				</Link>
-				<div className=" col-span-2">
+				<div className="bg-violet-200 rounded-2xl p-2 col-span-3 mr-4">
 					<Navbar />
 				</div>
 			</div>
