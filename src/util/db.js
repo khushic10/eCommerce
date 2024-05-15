@@ -20,3 +20,4 @@ async function connectToDatabase() {
 export { connectToDatabase };
 // export const connectionSrt = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.9jtywu7.mongodb.net/eCommerce?retryWrites=true&w=majority&appName=Cluster0`;
 // console.log(connectionSrt);
+//mongodb+srv://khushichaudhary989:<password>@cluster0.vjlrzr1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

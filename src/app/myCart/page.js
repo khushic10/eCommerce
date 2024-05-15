@@ -83,55 +83,68 @@ export default function Page() {
 					<Navbar />
 				</div>
 			</div>
-			<div className=" m-12">
-				<h1 className="m-2 text-2xl text-yellow-700">Artworks in Cart</h1>
-				<div className="container mx-auto">
-					<div className="grid grid-cols-4 gap-6">
-						{products &&
-							products.cart.items &&
-							products.cart.items.map((product) => (
-								<div className=" h-96" key={product.product._id}>
-									<Link href={`/${product.product._id}`}>
-										<div className=" h-72">
-											<img
-												className=" rounded-2xl h-full w-full"
-												src={product.product.image}
-												alt=""
-											/>
+			<div className=" m-12 grid grid-cols-4">
+				<div className="col-span-3 m-4">
+					<h1 className="m-2 text-2xl text-yellow-700">Artworks in Cart</h1>
+					<div className="container mx-auto">
+						<div className="grid grid-cols-3 gap-4">
+							{products &&
+								products.cart.items &&
+								products.cart.items.map((product) => (
+									<div className=" h-96" key={product.product._id}>
+										<Link href={`/${product.product._id}`}>
+											<div className=" h-72">
+												<img
+													className=" rounded-2xl h-full w-full"
+													src={product.product.image}
+													alt=""
+												/>
+											</div>
+										</Link>
+										<div className="flex justify-between ml-2 mr-2 mt-0.5">
+											<div>
+												<h2 className=" text-purple-900 text-sm">
+													{product.product.name}
+												</h2>
+												<p className="flex justify-start items-start text-sm font-bold text-gray-500">
+													<span className=" text-xs mr-1 font-semibold">
+														Price:
+													</span>{" "}
+													Rs.
+													{product.product.price}
+												</p>
+												<h3 className=" text-purple-900 text-sm">
+													Quantity: {product.quantity}
+												</h3>
+											</div>
+											<button
+												className="bg-red-500 text-white text-xs p-1 my-2 rounded h-1/2 font-semibold"
+												onClick={() => Remove(product.product._id)}
+											>
+												Remove
+											</button>
 										</div>
-									</Link>
-									<div className="flex justify-between ml-2 mr-2 mt-0.5">
-										<div>
-											<h2 className=" text-purple-900 text-sm">
-												{product.product.name}
-											</h2>
-											<p className="flex justify-start items-start text-sm font-bold text-gray-500">
-												<span className=" text-xs mr-1 font-semibold">
-													Price:
-												</span>{" "}
-												Rs.
-												{product.product.price}
-											</p>
-											<h3 className=" text-purple-900 text-sm">
-												Quantity: {product.quantity}
-											</h3>
-										</div>
-										<button
-											className="bg-red-500 text-white text-xs p-1 my-2 rounded h-1/2 font-semibold"
-											onClick={() => Remove(product.product._id)}
-										>
-											Remove
-										</button>
 									</div>
-								</div>
-							))}
+								))}
+						</div>
 					</div>
-					<h2 className="text-sm text-yellow-700">
-						Total No Of Items In Cart: {products ? products.NoOfItems : 0}
-					</h2>
-					<h2 className="text-sm text-yellow-700">
-						Total Cost for Items in Cart: {products ? products.TotalCost : 0}
-					</h2>
+				</div>
+				<div className="col-span-1 m-2 border p-2 justify-center text-center">
+					<h1>Order Summary</h1>
+					<div className="bg-red-100 rounded-xl p-2">
+						<h1>Cart Items</h1>
+						<h2 className="text-sm text-yellow-700">
+							Total No Of Items: {products ? products.NoOfItems : 0}
+						</h2>
+						<h2 className="text-sm text-yellow-700">
+							Total Cost: {products ? products.TotalCost : 0}
+						</h2>
+						<Link href="/myCart/checkout">
+							<button className="bg-green-500 text-white px-3 py-1 text-base rounded-md ">
+								CheckOut
+							</button>
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>
