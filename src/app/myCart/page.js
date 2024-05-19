@@ -137,7 +137,7 @@ export default function Page() {
 							Total No Of Items: {products ? products.NoOfItems : 0}
 						</h2>
 						<h2 className="text-sm text-yellow-700">
-							Total Cost: {products ? products.TotalCost : 0}
+							Total Cost: Rs.{products ? products.TotalCost : 0}
 						</h2>
 						<Link href="/myCart/checkout">
 							<button className="bg-green-500 text-white px-3 py-1 text-base rounded-md ">

@@ -22,7 +22,6 @@ async function verifyToken(authorizationHeader, res) {
 		res.status(403).json({ error: "Authorization header missing" });
 	}
 	const token = authorizationHeader.replace("Bearer ", "").trim();
-	console.log(token);
 	if (!token) {
 		res.status(403).json({ error: "Token is null or empty" });
 	}

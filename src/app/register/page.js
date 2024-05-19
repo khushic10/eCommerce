@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Navbar from "../../../components/navbar";
 
 export default function Register() {
 	const [email, setEmail] = useState("");

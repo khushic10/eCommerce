@@ -39,7 +39,9 @@ const Navbar = () => {
 					</li>
 					<li className="m-4 p-1 hover:bg-gray-300 active:bg-gray-300 rounded-xl">
 						{token ? (
-							<span onClick={() => onLogout()}>Logout</span>
+							<span onClick={() => onLogout()} className=" cursor-pointer">
+								Logout
+							</span>
 						) : (
 							<Link href="/login">Login</Link>
 						)}

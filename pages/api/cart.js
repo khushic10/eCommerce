@@ -12,7 +12,6 @@ async function verifyToken(authorizationHeader, res) {
 	}
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-		console.log(decoded);
 		if (decoded.role !== "user") {
 			res.status(403).json({ error: "Unauthorized access" });
 		} else {
@@ -73,23 +72,24 @@ export default async function handler(req, res) {
 		} else if (req.method === "DELETE") {
 			const { productId } = req.body;
 
-			if (!productId) {
-				return res.status(400).json({ error: "productId is required" });
-			}
-
 			const cart = await Cart.findOne({ user: userId });
 			if (!cart) {
 				return res.status(404).json({ error: "Cart not found" });
 			}
 
-			const itemIndex = cart.items.findIndex(
-				(item) => item.product._id.toString() === productId
-			);
-			if (itemIndex === -1) {
-				return res.status(404).json({ error: "Item not found in cart" });
+			if (productId) {
+				const itemIndex = cart.items.findIndex(
+					(item) => item.product._id.toString() === productId
+				);
+				if (itemIndex === -1) {
+					return res.status(404).json({ error: "Item not found in cart" });
+				}
+				cart.items.splice(itemIndex, 1);
+			} else {
+				cart.items = [];
 			}
-			cart.items.splice(itemIndex, 1);
 			await cart.save();
+
 			let NoOfItems = 0;
 			let TotalCost = 0;
 			cart.items.forEach((item) => {
