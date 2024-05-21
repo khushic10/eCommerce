@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Navbar from "../../../components/navbar";
+import Navbar from "../../components/navbar";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -71,18 +71,7 @@ export default function Page() {
 
 	return (
 		<div>
-			<div className="grid grid-cols-5">
-				<Link href="/" className="col-span-2 ml-8">
-					<img
-						src="http://localhost:3000/img/Logo.png"
-						alt="Logo"
-						className="h-28 "
-					/>
-				</Link>
-				<div className="bg-violet-200 rounded-2xl p-2 col-span-3 mr-4">
-					<Navbar />
-				</div>
-			</div>
+			<Navbar />
 			<div className=" m-12 grid grid-cols-4">
 				<div className="col-span-3 m-4">
 					<h1 className="m-2 text-2xl text-yellow-700">Artworks in Cart</h1>
@@ -118,7 +107,7 @@ export default function Page() {
 												</h3>
 											</div>
 											<button
-												className="bg-red-500 text-white text-xs p-1 my-2 rounded h-1/2 font-semibold"
+												className="bg-custom-brown font-sans text-custom-gray text-sm px-2 py-1 my-2 rounded h-1/2 font-semibold"
 												onClick={() => Remove(product.product._id)}
 											>
 												Remove
@@ -130,9 +119,11 @@ export default function Page() {
 					</div>
 				</div>
 				<div className="col-span-1 m-2 border p-2 justify-center text-center">
-					<h1>Order Summary</h1>
-					<div className="bg-red-100 rounded-xl p-2">
-						<h1>Cart Items</h1>
+					<h1 className="text-xl text-custom-black font-serif mb-2 tracking-wide">
+						Order Summary
+					</h1>
+					<div className="bg-custom-creme rounded-xl p-2">
+						<h1 className="text-custom-brown">Cart Items</h1>
 						<h2 className="text-sm text-yellow-700">
 							Total No Of Items: {products ? products.NoOfItems : 0}
 						</h2>

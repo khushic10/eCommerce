@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar";
+import Navbar from "../components/navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -54,30 +54,7 @@ export default function Home() {
 	};
 	return (
 		<div>
-			<div className="grid grid-cols-5">
-				<Link href="/" className="col-span-2 ml-8">
-					<img
-						src="http://localhost:3000/img/Logo.png"
-						alt="Logo"
-						className="h-28 "
-					/>
-				</Link>
-				<div className="bg-violet-200 rounded-2xl p-2 col-span-3 mr-4">
-					<Navbar />
-				</div>
-			</div>
-			<div className="bg-purple-400 p-6 rounded-3xl shadow-md text-center m-4">
-				<h1 className=" text-white font-semibold mb-4 text-3xl">
-					Shop Artworks
-				</h1>
-				<p className="text-yellow-900 text-sm">
-					Her Artistry Novel: A showcase of creativity and expression. Explore a
-					curated selection of captivating artwork, each piece a chapter in a
-					visual story. From vibrant paintings to evocative ideas, immerse
-					yourself in a world where imagination knows no bounds. Buy Artworks
-					and experience the beauty and narrative by Her Artistry Novel
-				</p>
-			</div>
+			<Navbar />
 			<div className=" m-12">
 				<h1 className="m-2 text-2xl text-yellow-700 ">Available Artworks</h1>
 				<div className="container mx-auto">
@@ -105,7 +82,7 @@ export default function Home() {
 										</p>
 									</div>
 									<button
-										className="bg-yellow-300 text-indigo-500 text-xs p-1 my-2 rounded h-1/2 font-semibold"
+										className="bg-custom-orange font-sans text-custom-gray text-sm py-1 px-2 my-2 rounded-lg h-1/2 font-medium"
 										onClick={() => addCart(product._id)}
 									>
 										Add To Cart
