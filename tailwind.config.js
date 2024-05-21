@@ -20,6 +20,7 @@ module.exports = {
 				"custom-pink": "#d1bfcf",
 				"custom-creme": "#e4dfdc",
 				"custom-gray": "#eaecf1",
+				"custom-yellow": "#f2e1d6",
 			},
 		},
 	},

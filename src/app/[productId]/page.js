@@ -77,21 +77,13 @@ export default function ProductDetail({ params }) {
 	};
 	return (
 		<div>
-			<div className="grid grid-cols-4">
-				<Link href="/" className="col-span-2">
-					<img
-						src="http://localhost:3000/img/Logo.png"
-						alt="Logo"
-						className="h-32 "
-					/>
-				</Link>
-				<div className=" col-span-2">
-					<Navbar />
-				</div>
-			</div>
+			<Navbar />
 			{product && (
 				<div className=" m-12">
-					<Link href="/" className="m-4">
+					<Link
+						href="/"
+						className=" bg-custom-black text-white rounded py-1 px-2"
+					>
 						Back
 					</Link>
 					<div className="grid grid-cols-2 gap-6">
@@ -103,15 +95,21 @@ export default function ProductDetail({ params }) {
 							/>
 						</div>
 						<div className=" ml-2 mr-2 mt-0.5">
-							<h1 className="m-2 text-4xl text-yellow-700 ">{product.name}</h1>
+							<h1 className="m-2 text-4xl text-yellow-700 font-serif">
+								{product.name}
+							</h1>
 							<div>
-								<p className="m-2 text-xm font-semibold">{product.details}</p>
+								<p className="m-2 text-xm font-semibold text-custom-black font-sans">
+									{product.details}
+								</p>
 								<p className="flex justify-start items-start text-xl font-bold text-gray-500 m-4">
-									<span className=" text-sm mr-1 font-semibold">Price:</span>{" "}
+									<span className=" text-sm mr-1 font-semibold font-serif">
+										Price:
+									</span>{" "}
 									Rs.
 									{product.price}
 								</p>
-								<div className="flex items-center m-4 text-yellow-700">
+								<div className="flex items-center m-4 text-yellow-700 font-serif">
 									Quantity:
 									<button
 										className="bg-red-500 m-2 px-2 text-xl rounded-md text-white font-bold"
@@ -128,7 +126,7 @@ export default function ProductDetail({ params }) {
 									</button>
 								</div>
 								<button
-									className="bg-yellow-300 text-yellow-700 text-sm p-2 m-4 rounded h-1/2 font-semibold"
+									className="bg-custom-orange text-custom-gray text-sm p-2 m-4 rounded-lg h-1/2 font-semibold"
 									onClick={() => addCart(productId)}
 								>
 									Add To Cart
@@ -136,7 +134,7 @@ export default function ProductDetail({ params }) {
 								<div className="grid grid-cols-4 gap-2 mt-20">
 									{other.map((other) => (
 										<Link href={`/${other._id}`} key={other._id}>
-											<div className="h-40 p-1 hover:bg-purple-300 rounded-2xl">
+											<div className="h-40 p-1 hover:bg-custom-red rounded-2xl">
 												<img
 													className=" rounded-2xl h-full w-full"
 													src={other.image}

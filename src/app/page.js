@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
 	const [products, setProducts] = useState([]);
@@ -42,9 +43,9 @@ export default function Home() {
 				});
 				if (!res.ok) {
 					console.log("error");
-					throw new Error("Error adding item to cart");
+					toast.error("Error adding item to cart");
 				}
-				alert("Item has been successfully added to the cart.");
+				toast.success("Item added to cart");
 			} else {
 				router.push("/login");
 			}
@@ -54,6 +55,7 @@ export default function Home() {
 	};
 	return (
 		<div>
+			<ToastContainer position="top-center" autoClose={1500} />
 			<Navbar />
 			<div className=" m-12">
 				<h1 className="m-2 text-2xl text-yellow-700 ">Available Artworks</h1>

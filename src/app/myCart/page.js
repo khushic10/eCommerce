@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../components/navbar";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Page() {
 	const [token, setToken] = useState("");
@@ -56,9 +57,9 @@ export default function Page() {
 				});
 				if (!res.ok) {
 					console.log("error");
-					throw new Error("Error deleting item from cart");
+					toast.error("Error removing item from cart");
 				} else {
-					alert("Item has been successfully deleted from the cart.");
+					toast.success("Item has removed from cart");
 					const data = await res.json();
 					setProducts(data);
 					fetchData();
@@ -71,6 +72,7 @@ export default function Page() {
 
 	return (
 		<div>
+			<ToastContainer position="top-center" autoClose={1500} />
 			<Navbar />
 			<div className=" m-12 grid grid-cols-4">
 				<div className="col-span-3 m-4">

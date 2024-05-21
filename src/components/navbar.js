@@ -44,7 +44,7 @@ export default function Navbar() {
 						<img
 							src="http://localhost:3000/img/Logo.png"
 							alt="Logo"
-							className="h-16"
+							className="h-20"
 						/>
 					</Link>
 				</div>
