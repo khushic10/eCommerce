@@ -19,7 +19,7 @@ export default function Home() {
 		}
 		const fetchData = async () => {
 			try {
-				const response = await fetch("/api/products");
+				const response = await fetch("/api/user/products");
 				const data = await response.json();
 				setProducts(data);
 			} catch (error) {
@@ -33,7 +33,7 @@ export default function Home() {
 	const addCart = async (productId) => {
 		try {
 			if (token) {
-				const res = await fetch("/api/cart", {
+				const res = await fetch("/api/user/cart", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

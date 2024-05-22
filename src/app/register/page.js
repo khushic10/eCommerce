@@ -29,7 +29,7 @@ export default function Register() {
 		console.log(formData);
 		if (Object.keys(validationErrors).length === 0) {
 			try {
-				const res = await fetch("/api/register", {
+				const res = await fetch("/api/user/register", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

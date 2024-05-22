@@ -27,7 +27,7 @@ export default function Page() {
 	}, [token]);
 	const fetchData = async () => {
 		try {
-			const res = await fetch("/api/cart", {
+			const res = await fetch("/api/user/cart", {
 				method: "GET",
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export default function Page() {
 	const Remove = async (productId) => {
 		try {
 			if (token) {
-				const res = await fetch("/api/cart", {
+				const res = await fetch("/api/user/cart", {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json",

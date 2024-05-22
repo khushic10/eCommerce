@@ -41,8 +41,9 @@ export default function Login() {
 				}
 
 				const data = await res.json();
-				localStorage.setItem("ecomtoken", data.token);
-				localStorage.setItem("userId", `${data.userId}`);
+				localStorage.setItem("merchantToken", data.token);
+				localStorage.setItem("merchantId", `${data.merchantId}`);
+				localStorage.setItem("role", `${data.role}`);
 				router.push("/");
 			} catch (error) {
 				setError(error.message);

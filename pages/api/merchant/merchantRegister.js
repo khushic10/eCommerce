@@ -7,11 +7,11 @@ export default async function handler(req, res) {
 		try {
 			await connectToDatabase();
 
-			const { password, email } = req.body;
+			const { password, email, fullName } = req.body;
 
 			if (!email || !password) {
 				return res.status(400).json({
-					error: "Username,email and password are required",
+					error: "fullName,email and password are required",
 				});
 			}
 
@@ -30,6 +30,7 @@ export default async function handler(req, res) {
 			const newMerchant = new Merchant({
 				email,
 				password: hashedPassword,
+				fullName: fullName,
 			});
 
 			await newMerchant.save();

@@ -41,7 +41,7 @@ export default function page() {
 	}, [token]);
 	const fetchData = async () => {
 		try {
-			const res = await fetch("/api/cart", {
+			const res = await fetch("/api/user/cart", {
 				method: "GET",
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ export default function page() {
 	const emptyCart = async () => {
 		try {
 			if (token) {
-				const res = await fetch("/api/cart", {
+				const res = await fetch("/api/user/cart", {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json",
@@ -86,7 +86,7 @@ export default function page() {
 		e.preventDefault();
 
 		try {
-			const res = await fetch("/api/payment", {
+			const res = await fetch("/api/user/payment", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

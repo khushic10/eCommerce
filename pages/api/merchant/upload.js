@@ -1,10 +1,10 @@
-// Import necessary modules
 import { connectToDatabase } from "@/util/db";
 import multer from "multer";
 import { Product } from "@/util/model/Product";
+import { Merchant } from "@/util/model/Merchant";
 import path from "path";
 import sharp from "sharp";
-import jwt from "jsonwebtoken"; // Import jwt module
+import jwt from "jsonwebtoken";
 
 // Set up multer for file upload
 const upload = multer({ dest: "public/images/" });
@@ -20,20 +20,26 @@ export const config = {
 async function verifyToken(authorizationHeader, res) {
 	if (!authorizationHeader) {
 		res.status(403).json({ error: "Authorization header missing" });
+		throw new Error("Authorization header missing");
 	}
+
 	const token = authorizationHeader.replace("Bearer ", "").trim();
 	if (!token) {
 		res.status(403).json({ error: "Token is null or empty" });
+		throw new Error("Token is null or empty");
 	}
+
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		if (decoded.role !== "merchant") {
 			res.status(403).json({ error: "Unauthorized access" });
+			throw new Error("Unauthorized access");
 		} else {
-			return decoded.userId;
+			return decoded.merchantId;
 		}
 	} catch (error) {
 		res.status(403).json({ error: "Invalid Token" });
+		throw new Error("Invalid Token");
 	}
 }
 
@@ -44,8 +50,12 @@ export default async function handler(req, res) {
 			// Establish database connection
 			await connectToDatabase();
 
-			// Verify JWT token
-			const userId = await verifyToken(req.headers.authorization, res);
+			const merchantId = await verifyToken(req.headers.authorization, res);
+			const merchant = await Merchant.findById(merchantId);
+			if (!merchant) {
+				return res.status(404).json({ error: "Merchant not found" });
+			}
+			const merchantName = merchant.fullName;
 
 			// Handle file upload
 			upload.single("image")(req, res, async function (err) {
@@ -71,7 +81,14 @@ export default async function handler(req, res) {
 				)}`;
 
 				// Create new Product instance and save to database
-				const product = new Product({ name, price, details, image, userId });
+				const product = new Product({
+					name,
+					price,
+					details,
+					image,
+					merchantId,
+					merchantName,
+				});
 				await product.save();
 
 				// Return success response
