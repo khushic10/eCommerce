@@ -17,16 +17,16 @@ export default function page() {
 					<div className="mt-4 text-lg text-gray-500 font-semibold">
 						Thank you for ordering.
 					</div>
-					<div className="bg-blue-100 p-4 rounded-lg mt-4 text-lg text-gray-700">
+					<div className="bg-custom-pink p-4 rounded-lg mt-4 text-lg text-gray-700">
 						Your payment was successful. You will receive your artworks within 2
 						weeks from the order date.
 					</div>
 				</div>
 				<Link
 					href="/"
-					className="bg-blue-500 text-white px-2 py-1 rounded ml-12"
+					className="bg-custom-orange text-white px-2 py-1 rounded ml-12"
 				>
-					Shop More
+					Back to Home Page
 				</Link>
 			</div>
 		</>

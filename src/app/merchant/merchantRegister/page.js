@@ -8,6 +8,7 @@ export default function Register() {
 	const initialState = {
 		email: "",
 		password: "",
+		fullName: "",
 	};
 	const [formData, setFormData] = useState(initialState);
 	const [errors, setErrors] = useState({});
@@ -28,7 +29,7 @@ export default function Register() {
 		console.log(formData);
 		if (Object.keys(validationErrors).length === 0) {
 			try {
-				const res = await fetch("/api/merchantRegister", {
+				const res = await fetch("/api/merchant/merchantRegister", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -44,7 +45,7 @@ export default function Register() {
 					const data = await res.json();
 					setFormData(initialState);
 					toast.success(data.message);
-					router.push("/login");
+					router.push("/merchant/merchantLogin");
 				}
 			} catch (error) {
 				setError(error.message);
@@ -86,6 +87,22 @@ export default function Register() {
 						Merchant Register
 					</h1>
 					<form onSubmit={handleSubmit}>
+						<div>
+							<div className="text-sm font-semibold text-custom-creme mb-2">
+								Full Name
+							</div>
+							<input
+								className="w-64 h-10 px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-custom-brown placeholder-custom-gray"
+								type="text"
+								name="fullName"
+								value={formData.fullName}
+								onChange={handleChange}
+								required
+							/>
+							{errors.fullName && (
+								<div className="text-red-600">{errors.fullName}</div>
+							)}
+						</div>
 						<div>
 							<div className="text-sm font-semibold text-custom-creme mb-2">
 								Email

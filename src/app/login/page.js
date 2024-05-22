@@ -27,7 +27,7 @@ export default function Login() {
 		const validationErrors = validateForm(formData);
 		if (Object.keys(validationErrors).length === 0) {
 			try {
-				const res = await fetch("/api/login", {
+				const res = await fetch("/api/user/login", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

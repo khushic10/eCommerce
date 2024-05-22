@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Navbar from "../../components/navbar";
 
 export default function Login() {
 	const [formData, setFormData] = useState({
@@ -27,7 +26,7 @@ export default function Login() {
 		const validationErrors = validateForm(formData);
 		if (Object.keys(validationErrors).length === 0) {
 			try {
-				const res = await fetch("/api/merchantLogin", {
+				const res = await fetch("/api/merchant/merchantLogin", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -38,13 +37,13 @@ export default function Login() {
 				if (!res.ok) {
 					const error = res.json();
 					setError(error.error);
+				} else {
+					const data = await res.json();
+					localStorage.setItem("merchantToken", data.token);
+					localStorage.setItem("merchantId", `${data.merchantId}`);
+					localStorage.setItem("role", `${data.role}`);
+					router.push("/merchant");
 				}
-
-				const data = await res.json();
-				localStorage.setItem("merchantToken", data.token);
-				localStorage.setItem("merchantId", `${data.merchantId}`);
-				localStorage.setItem("role", `${data.role}`);
-				router.push("/");
 			} catch (error) {
 				setError(error.message);
 			}

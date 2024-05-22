@@ -1,20 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import MerchantNavbar from "@/components/merchantNavbar";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function CreateProduct() {
-	const [formData, setFormData] = useState({
+	const initialState = {
 		name: "",
 		details: "",
 		price: "",
 		image: null,
-	});
+	};
+	const [formData, setFormData] = useState(initialState);
 	const [token, setToken] = useState(null);
 	const router = useRouter();
-	function onLogout() {
-		setToken(null);
-		localStorage.removeItem("merchantToken");
-	}
+	const [errors, setErrors] = useState({});
+	const [error, setError] = useState("");
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const storedToken = localStorage.getItem("merchantToken");
@@ -23,7 +24,7 @@ export default function CreateProduct() {
 				console.log(storedRole);
 				setToken(storedToken);
 			} else {
-				router.push("/merchantLogin");
+				router.push("/merchant/merchantLogin");
 			}
 		}
 	}, []);
@@ -31,93 +32,164 @@ export default function CreateProduct() {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData({ ...formData, [name]: value });
+		const validationErrors = validateField(name, value);
+		setErrors({
+			...errors,
+			[name]: validationErrors,
+		});
 	};
 
 	const handleImageChange = (e) => {
 		setFormData({ ...formData, image: e.target.files[0] });
+		const validationErrors = validateField("image", e.target.files[0]);
+		setErrors({
+			...errors,
+			image: validationErrors,
+		});
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		const validationErrors = validateForm(formData);
+		if (Object.keys(validationErrors).length === 0) {
+			const postData = new FormData();
+			postData.append("name", formData.name);
+			postData.append("details", formData.details);
+			postData.append("price", formData.price);
+			postData.append("image", formData.image);
 
-		const postData = new FormData();
-		postData.append("name", formData.name);
-		postData.append("details", formData.details);
-		postData.append("price", formData.price);
-		postData.append("image", formData.image);
+			try {
+				if (token) {
+					const response = await fetch("/api/merchant/upload", {
+						method: "POST",
+						body: postData,
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					});
 
-		try {
-			if (token) {
-				const response = await fetch("/api/upload", {
-					method: "POST",
-					body: postData,
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
+					if (!response.ok) {
+						throw new Error("Failed to create product");
+					}
 
-				if (!response.ok) {
-					throw new Error("Failed to create product");
+					const data = await response.json();
+					toast.success(data.message);
+					setFormData(initialState);
+				} else {
+					router.push("/merchant/merchantLogin");
 				}
-
-				const data = await response.json();
-				console.log("Product created successfully:", data);
-				// Reset form fields or provide feedback to the user
-			} else {
-				router.push("/merchantLogin");
+			} catch (error) {
+				console.error("Error creating product:", error.message);
+				// Handle errors or provide feedback to the user
 			}
-		} catch (error) {
-			console.error("Error creating product:", error.message);
-			// Handle errors or provide feedback to the user
+		} else {
+			setErrors(validationErrors);
 		}
+	};
+	const validateForm = (data) => {
+		let errors = {};
+		for (let field in data) {
+			const fieldErrors = validateField(field, data[field]);
+			if (fieldErrors) {
+				errors[field] = fieldErrors;
+			}
+		}
+		return errors;
+	};
+
+	const validateField = (fieldName, value) => {
+		let fieldErrors = null;
+		if (fieldName === "image") {
+			fieldErrors = value === null ? `${fieldName} is required` : null;
+		} else {
+			fieldErrors = !value.trim() ? `${fieldName} is required` : null;
+		}
+		return fieldErrors;
 	};
 
 	return (
-		<div>
-			<button onClick={() => onLogout()}>Logout</button>
-			<h1>Create Product</h1>
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label htmlFor="name">Name:</label>
-					<input
-						type="text"
-						id="name"
-						name="name"
-						value={formData.name}
-						onChange={handleChange}
-					/>
+		<>
+			<ToastContainer position="top-center" autoClose={1500} />
+			<div className="pb-8">
+				<MerchantNavbar />
+				<div className="max-w-md mx-auto mt-8 p-6 bg-custom-creme rounded-lg shadow-md">
+					<h1 className="text-2xl font-bold text-custom-brown mb-4 text-center">
+						Create Product
+					</h1>
+					<form onSubmit={handleSubmit} className="space-y-4">
+						<div>
+							<label htmlFor="name" className="text-custom-black font-medium">
+								Name:
+							</label>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								value={formData.name}
+								onChange={handleChange}
+								className="block w-full mt-1 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
+							/>
+							{errors.name && <div className="text-red-600">{errors.name}</div>}
+						</div>
+						<div>
+							<label
+								htmlFor="details"
+								className="text-custom-black font-medium"
+							>
+								Details:
+							</label>
+							<textarea
+								id="details"
+								name="details"
+								value={formData.details}
+								onChange={handleChange}
+								className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
+							/>
+							{errors.details && (
+								<div className="text-red-600">{errors.details}</div>
+							)}
+						</div>
+						<div>
+							<label htmlFor="price" className="text-custom-black font-medium">
+								Price:
+							</label>
+							<input
+								type="number"
+								id="price"
+								name="price"
+								value={formData.price}
+								onChange={handleChange}
+								className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
+							/>
+							{errors.price && (
+								<div className="text-red-600">{errors.price}</div>
+							)}
+						</div>
+						<div>
+							<label htmlFor="image" className="text-custom-black font-medium">
+								Image:
+							</label>
+							<input
+								type="file"
+								id="image"
+								name="image"
+								accept="image/*"
+								onChange={handleImageChange}
+								className="block mt-1"
+							/>
+							{errors.image && (
+								<div className="text-red-600">{errors.image}</div>
+							)}
+						</div>
+						<button
+							type="submit"
+							className="w-full bg-custom-orange text-white py-2 px-4 rounded-md shadow-sm hover:bg-custom-red focus:outline-none focus:ring-2 focus:ring-custom-orange focus:ring-opacity-50"
+						>
+							Submit
+						</button>
+					</form>
 				</div>
-				<div>
-					<label htmlFor="details">Details:</label>
-					<textarea
-						id="details"
-						name="details"
-						value={formData.details}
-						onChange={handleChange}
-					/>
-				</div>
-				<div>
-					<label htmlFor="price">Price:</label>
-					<input
-						type="text"
-						id="price"
-						name="price"
-						value={formData.price}
-						onChange={handleChange}
-					/>
-				</div>
-				<div>
-					<label htmlFor="image">Image:</label>
-					<input
-						type="file"
-						id="image"
-						name="image"
-						accept="image/*"
-						onChange={handleImageChange}
-					/>
-				</div>
-				<button type="submit">Submit</button>
-			</form>
-		</div>
+			</div>
+		</>
 	);
 }

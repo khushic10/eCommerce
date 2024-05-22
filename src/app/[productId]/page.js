@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function ProductDetail({ params }) {
 	const [product, setProduct] = useState();
@@ -21,7 +22,7 @@ export default function ProductDetail({ params }) {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(
-					`http://localhost:3000/api/product?productId=${productId}`
+					`/api/user/product?productId=${productId}`
 				);
 				const data = await response.json();
 				setProduct(data);
@@ -30,7 +31,7 @@ export default function ProductDetail({ params }) {
 			}
 			try {
 				const response = await fetch(
-					`http://localhost:3000/api/otherProduct/?productId=${productId}`
+					`/api/user/otherProduct/?productId=${productId}`
 				);
 				const data = await response.json();
 				setOther(data);
@@ -55,7 +56,7 @@ export default function ProductDetail({ params }) {
 	const addCart = async () => {
 		try {
 			if (token) {
-				const res = await fetch("/api/cart", {
+				const res = await fetch("/api/user/cart", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -67,7 +68,7 @@ export default function ProductDetail({ params }) {
 					console.log("error");
 					throw new Error("Error adding item to cart");
 				}
-				alert("Item has been successfully added to the cart.");
+				toast.success("Item added to the cart.");
 			} else {
 				router.push("/login");
 			}
@@ -77,6 +78,7 @@ export default function ProductDetail({ params }) {
 	};
 	return (
 		<div>
+			<ToastContainer position="top-center" autoClose={1500} />
 			<Navbar />
 			{product && (
 				<div className=" m-12">
@@ -126,12 +128,12 @@ export default function ProductDetail({ params }) {
 									</button>
 								</div>
 								<button
-									className="bg-custom-orange text-custom-gray text-sm p-2 m-4 rounded-lg h-1/2 font-semibold"
+									className="bg-custom-orange text-custom-gray text-sm p-2 m-2 rounded-lg h-1/2 font-semibold"
 									onClick={() => addCart(productId)}
 								>
 									Add To Cart
 								</button>
-								<div className="grid grid-cols-4 gap-2 mt-20">
+								<div className="grid grid-cols-4 gap-2 mt-2">
 									{other.map((other) => (
 										<Link href={`/${other._id}`} key={other._id}>
 											<div className="h-40 p-1 hover:bg-custom-red rounded-2xl">
