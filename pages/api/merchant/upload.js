@@ -5,6 +5,7 @@ import { Merchant } from "@/util/model/Merchant";
 import path from "path";
 import sharp from "sharp";
 import jwt from "jsonwebtoken";
+import fs from "fs";
 
 // Set up multer for file upload
 const upload = multer({ dest: "public/images/" });
@@ -43,6 +44,25 @@ async function verifyToken(authorizationHeader, res) {
 	}
 }
 
+// Function to handle image processing
+async function processImage(imagePath, filename) {
+	const outputImagePath = path.join("public/images", `${filename}.jpg`);
+	await sharp(imagePath).toFormat("jpg").toFile(outputImagePath);
+	return outputImagePath;
+}
+
+// Promisify the multer upload
+const uploadFile = (req, res) => {
+	return new Promise((resolve, reject) => {
+		upload.single("image")(req, res, (err) => {
+			if (err) {
+				return reject(err);
+			}
+			resolve(req.file);
+		});
+	});
+};
+
 // Define the API route handler
 export default async function handler(req, res) {
 	if (req.method === "POST") {
@@ -58,45 +78,62 @@ export default async function handler(req, res) {
 			const merchantName = merchant.fullName;
 
 			// Handle file upload
-			upload.single("image")(req, res, async function (err) {
-				if (err) {
-					console.error("Error uploading file:", err);
-					return res.status(500).json({ error: err.message });
-				}
+			const file = await uploadFile(req, res);
 
-				// Extract product data and image path
-				const { name, price, details } = req.body;
-				const imagePath = req.file.path;
-				const outputImagePath = path.join(
-					"public/images",
-					`${req.file.filename.replace(/\.\w+$/, "")}.jpg`
-				);
+			// Check if the file is uploaded
+			if (!file) {
+				return res.status(400).json({ error: "Image file is required" });
+			}
 
-				// Convert uploaded image to JPG format
-				await sharp(imagePath).toFormat("jpg").toFile(outputImagePath);
+			// Extract product data and image path
+			const { name, price, details, category } = req.body;
+			if (!name || !price || !details || !category) {
+				return res.status(400).json({ error: "All fields are required" });
+			}
 
-				// Construct image URL
-				const image = `http://localhost:3000/images/${path.basename(
-					outputImagePath
-				)}`;
+			// Check for duplicate product name
+			const existingProduct = await Product.findOne({ name });
+			if (existingProduct) {
+				return res
+					.status(409)
+					.json({ error: "Product with this name already exists" });
+			}
 
-				// Create new Product instance and save to database
-				const product = new Product({
-					name,
-					price,
-					details,
-					image,
-					merchantId,
-					merchantName,
-				});
-				await product.save();
+			const imagePath = file.path;
+			const outputImagePath = await processImage(
+				imagePath,
+				file.filename.replace(/\.\w+$/, "")
+			);
 
-				// Return success response
-				res.status(201).json({
-					success: true,
-					message: "Product created successfully",
-					product,
-				});
+			// Construct image URL
+			const image = `http://localhost:3000/images/${path.basename(
+				outputImagePath
+			)}`;
+
+			// Create new Product instance and save to database
+			const product = new Product({
+				name,
+				price,
+				details,
+				image,
+				category,
+				merchantId,
+				merchantName,
+			});
+			await product.save();
+
+			// Clean up the temporary file
+			try {
+				fs.unlinkSync(imagePath);
+			} catch (cleanupError) {
+				console.error("Error cleaning up temporary file:", cleanupError);
+			}
+
+			// Return success response
+			res.status(201).json({
+				success: true,
+				message: "Product created successfully",
+				product,
 			});
 		} catch (error) {
 			console.error("Error creating product:", error);

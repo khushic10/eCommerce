@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Navbar from "../../components/navbar";
 
-export default function page() {
+export default function AboutUs() {
 	return (
 		<div>
 			<Navbar />
@@ -14,7 +14,7 @@ export default function page() {
 					<p className="text-custom-brown mb-6">
 						Welcome to our vibrant world of art! At{" "}
 						<span className="text-custom-orange font-semibold font-serif">
-							Her Artistry Novel
+							Artistry Novel
 						</span>
 						, we believe that every wall deserves a splash of color and a story
 						to tell. Our journey began with a passion for creativity and an
@@ -24,7 +24,7 @@ export default function page() {
 					</p>
 
 					<div className="flex flex-wrap space-y-4 md:space-y-0 md:space-x-4">
-						<div className="bg-white p-8 rounded-lg shadow-md  flex-1">
+						<div className="bg-white p-8 rounded-lg shadow-md flex-1">
 							<h3 className="text-2xl font-semibold text-custom-orange mb-4 font-serif">
 								Our Vision
 							</h3>
@@ -37,7 +37,7 @@ export default function page() {
 								preferences and aesthetics.
 							</p>
 						</div>
-						<div className="bg-white p-8 rounded-lg shadow-md  flex-1">
+						<div className="bg-white p-8 rounded-lg shadow-md flex-1">
 							<h3 className="text-2xl font-semibold text-custom-orange mb-4 font-serif">
 								Our Collection
 							</h3>
@@ -52,7 +52,7 @@ export default function page() {
 						</div>
 					</div>
 
-					<div className="bg-white p-8 rounded-lg shadow-md  mt-4">
+					<div className="bg-white p-8 rounded-lg shadow-md mt-4">
 						<h3 className="text-2xl font-semibold text-custom-orange mb-4 font-serif">
 							Our Values
 						</h3>
@@ -88,7 +88,7 @@ export default function page() {
 					<p className="text-custom-brown mt-6">
 						Thank you for choosing{" "}
 						<span className="text-custom-orange font-semibold font-serif">
-							Her Artistry Novel
+							Artistry Novel
 						</span>{" "}
 						as your go-to destination for beautiful, colorful paintings. We look
 						forward to helping you find the perfect piece that brings joy and

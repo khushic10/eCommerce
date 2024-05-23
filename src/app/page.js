@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
 	const [products, setProducts] = useState([]);
+	const [searchKey, setSearchKey] = useState("");
+	const [searchError, setSearchError] = useState("");
 	const [token, setToken] = useState("");
 	const router = useRouter();
 
@@ -53,12 +55,60 @@ export default function Home() {
 			console.log(error.message);
 		}
 	};
+	const handleSearchInputChange = (e) => {
+		const value = e.target.value;
+		setSearchKey(value);
+		search(value);
+	};
+	const search = async (category) => {
+		try {
+			const res = await fetch(`/api/user/search?category=${category}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (!res.ok) {
+				const error = await res.json();
+				setSearchError(error.error);
+			}
+			const data = await res.json();
+			setProducts(data);
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
 	return (
 		<div>
 			<ToastContainer position="top-center" autoClose={1500} />
 			<Navbar />
 			<div className=" m-12">
-				<h1 className="m-2 text-2xl text-yellow-700 ">Available Artworks</h1>
+				<div className="flex items-center justify-between mb-4">
+					<h1 className="text-2xl font-semibold text-custom-orange">
+						Available Artworks
+					</h1>
+					<div className="relative">
+						<input
+							type="text"
+							value={searchKey}
+							onChange={handleSearchInputChange}
+							className="border border-gray-300 rounded-lg p-2 pl-10 focus:outline-none focus:ring-2 focus:ring-custom-orange focus:border-transparent"
+							placeholder="Search by category"
+						/>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-5 w-5 absolute left-3 top-2.5 text-gray-400"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+						>
+							<path
+								fillRule="evenodd"
+								d="M12.9 14.32a8 8 0 111.41-1.41l5.3 5.3a1 1 0 01-1.41 1.42l-5.3-5.3zM8 14a6 6 0 100-12 6 6 0 000 12z"
+								clipRule="evenodd"
+							/>
+						</svg>
+					</div>
+				</div>
 				<div className="container mx-auto">
 					<div className="grid grid-cols-4 gap-6">
 						{products.map((product) => (
@@ -74,7 +124,15 @@ export default function Home() {
 								</Link>
 								<div className="flex justify-between ml-2 mr-2 mt-0.5">
 									<div>
-										<h2 className=" text-purple-900 text-sm">{product.name}</h2>
+										<div className="text-sm text-custom-red font-serif">
+											Category:
+											<span className="text-custom-orange ml-2">
+												{product.category}
+											</span>
+										</div>
+										<h2 className=" text-custom-brown text-sm">
+											{product.name}
+										</h2>
 										<p className="flex justify-start items-start text-sm font-bold text-gray-500">
 											<span className=" text-xs mr-1 font-semibold">
 												Price:

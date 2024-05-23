@@ -36,7 +36,7 @@ export default function Navbar() {
 	return (
 		<>
 			<div className="bg-custom-brown text-white text-sm text-center font-serif p-1 rounded-t-3xl tracking-wider">
-				Her Artistry Novel <span className="ml-32">herArtistry@gmail.com</span>
+				Artistry Novel <span className="ml-32">herArtistry@gmail.com</span>
 			</div>
 			<nav className="bg-white w-full py-1 px-4 flex justify-between items-center shadow-md">
 				<div className="">
@@ -103,11 +103,11 @@ export default function Navbar() {
 					Shop Artworks
 				</h1>
 				<p className="text-custom-brown text-sm font-serif px-16">
-					Her Artistry Novel: A showcase of creativity and expression. Explore a
+					Artistry Novel: A showcase of creativity and expression. Explore a
 					curated selection of captivating artwork, each piece a chapter in a
 					visual story. From vibrant paintings to evocative ideas, immerse
 					yourself in a world where imagination knows no bounds. Buy Artworks
-					and experience the beauty and narrative by Her Artistry Novel
+					and experience the beauty and narrative by Artistry Novel
 				</p>
 			</div>
 		</>

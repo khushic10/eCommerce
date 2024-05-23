@@ -10,6 +10,7 @@ export default function CreateProduct() {
 		details: "",
 		price: "",
 		image: null,
+		category: "",
 	};
 	const [formData, setFormData] = useState(initialState);
 	const [token, setToken] = useState(null);
@@ -51,13 +52,14 @@ export default function CreateProduct() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const validationErrors = validateForm(formData);
+		console.log(formData);
 		if (Object.keys(validationErrors).length === 0) {
 			const postData = new FormData();
 			postData.append("name", formData.name);
 			postData.append("details", formData.details);
 			postData.append("price", formData.price);
 			postData.append("image", formData.image);
-
+			postData.append("category", formData.category);
 			try {
 				if (token) {
 					const response = await fetch("/api/merchant/upload", {
@@ -69,7 +71,8 @@ export default function CreateProduct() {
 					});
 
 					if (!response.ok) {
-						throw new Error("Failed to create product");
+						const error = await response.json();
+						console.log(error.error);
 					}
 
 					const data = await response.json();
@@ -163,6 +166,31 @@ export default function CreateProduct() {
 							/>
 							{errors.price && (
 								<div className="text-red-600">{errors.price}</div>
+							)}
+						</div>
+						<div>
+							<label
+								htmlFor="category"
+								className="text-custom-black font-medium"
+							>
+								Category:
+							</label>
+							<select
+								id="category"
+								name="category"
+								value={formData.category}
+								onChange={handleChange}
+								className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
+							>
+								<option>--Select--</option>
+								<option value="acrylic">Acrylic Painting</option>
+								<option value="watercolor">Watercolor Painting</option>
+								<option value="mandala">Mandala Art</option>
+								<option value="digital">Digital Art</option>
+								<option value="craft">Crafts</option>
+							</select>
+							{errors.category && (
+								<div className="text-red-600">{errors.category}</div>
 							)}
 						</div>
 						<div>

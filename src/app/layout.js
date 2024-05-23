@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-	title: "Her Artistry Novel",
+	title: "Artistry Novel",
 	description: "E-commerce website that includes artworks to be sold",
 };
 

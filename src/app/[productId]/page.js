@@ -91,12 +91,18 @@ export default function ProductDetail({ params }) {
 					<div className="grid grid-cols-2 gap-6">
 						<div className="h-screen">
 							<img
-								className=" rounded-2xl h-full w-full"
+								className=" rounded-2xl h-full w-full mt-4"
 								src={product.image}
 								alt=""
 							/>
 						</div>
 						<div className=" ml-2 mr-2 mt-0.5">
+							<div className="text-lg ml-1 text-custom-red font-serif">
+								Category:
+								<span className="text-custom-orange ml-2">
+									{product.category}
+								</span>
+							</div>
 							<h1 className="m-2 text-4xl text-yellow-700 font-serif">
 								{product.name}
 							</h1>
@@ -104,35 +110,45 @@ export default function ProductDetail({ params }) {
 								<p className="m-2 text-xm font-semibold text-custom-black font-sans">
 									{product.details}
 								</p>
-								<p className="flex justify-start items-start text-xl font-bold text-gray-500 m-4">
-									<span className=" text-sm mr-1 font-semibold font-serif">
-										Price:
-									</span>{" "}
-									Rs.
-									{product.price}
-								</p>
-								<div className="flex items-center m-4 text-yellow-700 font-serif">
-									Quantity:
-									<button
-										className="bg-red-500 m-2 px-2 text-xl rounded-md text-white font-bold"
-										onClick={decreaseQuantity}
-									>
-										-
-									</button>
-									{quantity}
-									<button
-										className="bg-green-500 m-2 px-2 text-xl rounded-md text-white font-bold"
-										onClick={increaseQuantity}
-									>
-										+
-									</button>
+								<div className="flex items-center ">
+									<p className="flex justify-start items-start text-xl font-bold text-gray-500 m-4">
+										<span className=" text-sm mr-1 font-semibold font-serif">
+											Price:
+										</span>{" "}
+										Rs.
+										{product.price}
+									</p>
+									<div className="flex items-center m-2 text-yellow-700 font-serif">
+										Quantity:
+										<button
+											className="bg-red-500 m-2 px-2 text-xl rounded-md text-white font-bold"
+											onClick={decreaseQuantity}
+										>
+											-
+										</button>
+										{quantity}
+										<button
+											className="bg-green-500 m-2 px-2 text-xl rounded-md text-white font-bold"
+											onClick={increaseQuantity}
+										>
+											+
+										</button>
+									</div>
+									<div className="text-lg text-custom-red font-serif text-end">
+										Artist:
+										<span className="text-custom-orange ml-2">
+											{product.merchantName}
+										</span>
+									</div>
 								</div>
+
 								<button
 									className="bg-custom-orange text-custom-gray text-sm p-2 m-2 rounded-lg h-1/2 font-semibold"
 									onClick={() => addCart(productId)}
 								>
 									Add To Cart
 								</button>
+
 								<div className="grid grid-cols-4 gap-2 mt-2">
 									{other.map((other) => (
 										<Link href={`/${other._id}`} key={other._id}>
