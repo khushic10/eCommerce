@@ -16,6 +16,7 @@ const productModel = new mongoose.Schema({
 	details: { type: String, required: true },
 	image: { type: String, required: true },
 	category: { type: String, required: true },
+	artist: { type: String, required: true },
 });
 
 export const Product =

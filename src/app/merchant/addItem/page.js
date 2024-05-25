@@ -11,6 +11,7 @@ export default function CreateProduct() {
 		price: "",
 		image: null,
 		category: "",
+		artist: "",
 	};
 	const [formData, setFormData] = useState(initialState);
 	const [token, setToken] = useState(null);
@@ -60,6 +61,7 @@ export default function CreateProduct() {
 			postData.append("price", formData.price);
 			postData.append("image", formData.image);
 			postData.append("category", formData.category);
+			postData.append("artist", formData.artist);
 			try {
 				if (token) {
 					const response = await fetch("/api/merchant/upload", {
@@ -122,7 +124,7 @@ export default function CreateProduct() {
 					<form onSubmit={handleSubmit} className="space-y-4">
 						<div>
 							<label htmlFor="name" className="text-custom-black font-medium">
-								Name:
+								Name of Painting:
 							</label>
 							<input
 								type="text"
@@ -191,6 +193,22 @@ export default function CreateProduct() {
 							</select>
 							{errors.category && (
 								<div className="text-red-600">{errors.category}</div>
+							)}
+						</div>
+						<div>
+							<label htmlFor="artist" className="text-custom-black font-medium">
+								Name of Artist:
+							</label>
+							<input
+								type="text"
+								id="artist"
+								name="artist"
+								value={formData.artist}
+								onChange={handleChange}
+								className="block w-full mt-1 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
+							/>
+							{errors.artist && (
+								<div className="text-red-600">{errors.artist}</div>
 							)}
 						</div>
 						<div>

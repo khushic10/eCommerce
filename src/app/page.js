@@ -82,8 +82,8 @@ export default function Home() {
 		<div>
 			<ToastContainer position="top-center" autoClose={1500} />
 			<Navbar />
-			<div className=" m-12">
-				<div className="flex items-center justify-between mb-4">
+			<div className=" m-12 sm:m-6">
+				<div className="md:flex items-center justify-between mb-4">
 					<h1 className="text-2xl font-semibold text-custom-orange">
 						Available Artworks
 					</h1>
@@ -110,19 +110,19 @@ export default function Home() {
 					</div>
 				</div>
 				<div className="container mx-auto">
-					<div className="grid grid-cols-4 gap-6">
+					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 md:gap-4 sm:gap-2">
 						{products.map((product) => (
 							<div className=" h-96" key={product._id}>
 								<Link href={`/${product._id}`}>
 									<div className=" h-72">
 										<img
-											className=" rounded-2xl h-full w-full"
+											className=" rounded-2xl h-full w-full sm:mt-2"
 											src={product.image}
 											alt=""
 										/>
 									</div>
 								</Link>
-								<div className="flex justify-between ml-2 mr-2 mt-0.5">
+								<div className="md:flex justify-between ml-2 mr-2 mt-0.5">
 									<div>
 										<div className="text-sm text-custom-red font-serif">
 											Category:
@@ -142,7 +142,7 @@ export default function Home() {
 										</p>
 									</div>
 									<button
-										className="bg-custom-orange font-sans text-custom-gray text-sm py-1 px-2 my-2 rounded-lg h-1/2 font-medium"
+										className="bg-custom-orange font-sans text-custom-gray text-sm py-1 px-2 my-2 rounded-lg h-1/2 font-medium "
 										onClick={() => addCart(product._id)}
 									>
 										Add To Cart

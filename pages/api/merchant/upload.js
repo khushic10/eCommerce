@@ -86,7 +86,7 @@ export default async function handler(req, res) {
 			}
 
 			// Extract product data and image path
-			const { name, price, details, category } = req.body;
+			const { name, price, details, category, artist } = req.body;
 			if (!name || !price || !details || !category) {
 				return res.status(400).json({ error: "All fields are required" });
 			}
@@ -119,6 +119,7 @@ export default async function handler(req, res) {
 				category,
 				merchantId,
 				merchantName,
+				artist,
 			});
 			await product.save();
 

@@ -123,14 +123,14 @@ export default function Login() {
 							Login
 						</button>
 					</div>
-					<div className="text-center text-custom-black">
+					{/* <div className="text-center text-custom-black">
 						Don't have an account yet?{" "}
 						<Link href="/merchant/merchantRegister">
 							<span className="cursor-pointer text-custom-black font-semibold">
 								Sign Up
 							</span>
 						</Link>
-					</div>
+					</div> */}
 				</form>
 			</div>
 		</div>

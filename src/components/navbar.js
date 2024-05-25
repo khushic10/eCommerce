@@ -36,9 +36,10 @@ export default function Navbar() {
 	return (
 		<>
 			<div className="bg-custom-brown text-white text-sm text-center font-serif p-1 rounded-t-3xl tracking-wider">
-				Artistry Novel <span className="ml-32">herArtistry@gmail.com</span>
+				Artistry Novel{" "}
+				<span className="ml-32 sm:ml-8">herArtistry@gmail.com</span>
 			</div>
-			<nav className="bg-white w-full py-1 px-4 flex justify-between items-center shadow-md">
+			<nav className="bg-white w-full py-1 px-4 flex justify-between items-center shadow-md sm:px-2">
 				<div className="">
 					<Link href="/">
 						<img

@@ -78,7 +78,7 @@ export default function Page() {
 				<div className="col-span-3 m-4">
 					<h1 className="m-2 text-2xl text-yellow-700">Artworks in Cart</h1>
 					<div className="container mx-auto">
-						<div className="grid grid-cols-3 gap-4">
+						<div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
 							{products &&
 								products.cart.items &&
 								products.cart.items.map((product) => (

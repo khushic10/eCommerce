@@ -137,7 +137,7 @@ export default function ProductDetail({ params }) {
 									<div className="text-lg text-custom-red font-serif text-end">
 										Artist:
 										<span className="text-custom-orange ml-2">
-											{product.merchantName}
+											{product.artist}
 										</span>
 									</div>
 								</div>
