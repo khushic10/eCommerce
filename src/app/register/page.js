@@ -9,6 +9,7 @@ export default function Register() {
 		username: "",
 		email: "",
 		password: "",
+		phone: "",
 	};
 	const [formData, setFormData] = useState(initialState);
 	const [errors, setErrors] = useState({});
@@ -82,7 +83,7 @@ export default function Register() {
 		<>
 			<ToastContainer position="top-center" />
 			<div className="flex justify-center items-center min-h-screen bg-custom-gray">
-				<div className="bg-custom-red w-1/2 p-6 rounded-2xl rounded-bl-2xl flex flex-col justify-center items-center">
+				<div className="bg-custom-red w-1/2 p-6 rounded-2xl rounded-bl-2xl mt-4 flex flex-col justify-center items-center">
 					<h1 className="text-3xl font-bold text-custom-gray my-6">
 						User Register
 					</h1>
@@ -97,7 +98,6 @@ export default function Register() {
 								name="username"
 								value={formData.username}
 								onChange={handleChange}
-								required
 							/>
 							{errors.username && (
 								<div className="text-red-600">{errors.username}</div>
@@ -113,12 +113,27 @@ export default function Register() {
 								name="email"
 								value={formData.email}
 								onChange={handleChange}
-								required
 							/>
 							{errors.email && (
 								<div className="text-red-600">{errors.email}</div>
 							)}
 						</div>
+						<div>
+							<div className="text-sm font-semibold text-custom-creme mb-2">
+								Phone Number
+							</div>
+							<input
+								className="w-64 h-10 px-4 py-2 mb-4 border rounded-md focus:outline-none focus:border-custom-brown placeholder-custom-gray"
+								type="number"
+								name="phone"
+								value={formData.phone}
+								onChange={handleChange}
+							/>
+							{errors.phone && (
+								<div className="text-red-600">{errors.phone}</div>
+							)}
+						</div>
+						{error && <p className="text-red-600">{error}</p>}
 						<div>
 							<div className="text-sm font-semibold text-custom-creme mb-2">
 								Password
@@ -129,7 +144,6 @@ export default function Register() {
 								name="password"
 								value={formData.password}
 								onChange={handleChange}
-								required
 							/>
 							{errors.password && (
 								<div className="text-red-600">{errors.password}</div>

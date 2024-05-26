@@ -1,17 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
+import Summary from "./summary/page";
+import Address from "./address/page";
+import Payment from "./payment/page";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { useRouter } from "next/navigation";
+import { AppContext } from "@/components/Context";
 
-export default function page() {
+export default function CheckoutPage() {
 	const [token, setToken] = useState("");
+	const { formData, setFormData } = useContext(AppContext);
 	const [products, setProducts] = useState(null);
-	const [amount, setAmount] = useState("");
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [phone, setPhone] = useState("");
-	const [error, setError] = useState("");
+	const [amount, setAmount] = useState(0); // Initialize amount state
 	const router = useRouter();
+
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const storedToken = localStorage.getItem("ecomtoken");
@@ -21,24 +24,34 @@ export default function page() {
 				router.push("/login");
 			}
 		}
-	}, []);
-	const payload = {
-		return_url: "http://localhost:3000/success/",
-		website_url: "http://localhost:3000/",
-		amount: amount,
-		purchase_order_id: "test12",
-		purchase_order_name: name,
-		customer_info: {
-			name: name,
-			email: email,
-			phone: phone,
-		},
-	};
+	}, [router]);
+
 	useEffect(() => {
 		if (token) {
 			fetchData();
+			fetchAddress();
 		}
 	}, [token]);
+	const fetchAddress = async () => {
+		try {
+			const res = await fetch("/api/user/address", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			if (res.ok) {
+				const data = await res.json();
+				setFormData(data[0]); // Set the fetched data to the formData state
+			} else {
+				const error = await res.json();
+				console.log(error.error);
+			}
+		} catch (error) {
+			console.error("Error fetching address:", error);
+		}
+	};
+
 	const fetchData = async () => {
 		try {
 			const res = await fetch("/api/user/cart", {
@@ -60,175 +73,82 @@ export default function page() {
 			console.error("Error fetching products:", error);
 		}
 	};
-	const emptyCart = async () => {
-		try {
-			if (token) {
-				const res = await fetch("/api/user/cart", {
-					method: "DELETE",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-				});
-				if (!res.ok) {
-					const error = await res.json();
-					console.log(error.error);
-				} else {
-					const data = await res.json();
-					console.log(data);
-				}
-			}
-		} catch (error) {
-			console.log(error.message);
-		}
-	};
-	const handleSubmit = async (e) => {
-		e.preventDefault();
 
-		try {
-			const res = await fetch("/api/user/payment", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(payload),
-			});
+	const [page, setPage] = useState(1);
 
-			if (!res.ok) {
-				const error = await res.json();
-				console.log(error);
-			} else {
-				const data = await res.json();
-				console.log(data);
-				emptyCart();
-				router.push(data.payment_url);
-			}
-		} catch (error) {
-			setError(error.message);
-		}
+	const nextPage = () => {
+		setPage(page + 1);
 	};
+
+	const prevPage = () => {
+		setPage(page - 1);
+	};
+
 	return (
 		<div className="p-8">
-			<Link
-				href="/myCart"
-				className="bg-gray-700 text-white px-4 py-1 rounded-lg"
-			>
-				Back
+			<Link href="/myCart">
+				<div className="bg-gray-700 text-white px-4 py-1 rounded-lg w-16">
+					Back
+				</div>
 			</Link>
-			<h1 className="text-2xl font-bold mb-6 text-center">Payment</h1>
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-				<div className="border shadow-md rounded-xl max-h-svh overflow-auto p-4 bg-white">
-					<h2 className="text-xl font-semibold mb-4 text-center">
-						Your Orders
-					</h2>
-					<div>
-						{products &&
-							products.cart.items &&
-							products.cart.items.map((product) => (
-								<div
-									className="grid grid-cols-2 gap-4 m-2 items-center"
-									key={product.product._id}
-								>
-									<div className="h-40">
-										<img
-											className="rounded-2xl h-full w-auto object-cover"
-											src={product.product.image}
-											alt={product.product.name}
-										/>
-									</div>
-									<div className="ml-2">
-										<h3 className="text-lg font-semibold">
-											Her Artistry Novel
-										</h3>
-										<h2 className="text-sm text-red-800">
-											{product.product.name}
-										</h2>
-										<p className="text-sm font-bold text-gray-500">
-											<span className="text-xs mr-1 font-semibold">Price:</span>{" "}
-											Rs. {product.product.price}
-										</p>
-									</div>
-								</div>
-							))}
-					</div>
+			<div className="flex justify-between my-8 mx-60">
+				<button
+					className={`${
+						page === 1 ? "bg-custom-brown text-white" : "text-gray-400"
+					} px-4 py-1 rounded-xl`}
+					onClick={() => setPage(1)}
+				>
+					Summary
+				</button>
+				<button
+					className={`${
+						page === 2 ? "bg-custom-brown text-white" : "text-gray-400"
+					} px-4 py-1 rounded-xl`}
+					onClick={() => setPage(2)}
+				>
+					Shipping Address
+				</button>
+				<button
+					className={`${
+						page === 3 ? "bg-custom-brown text-white" : "text-gray-400"
+					} px-4 py-1 rounded-xl`}
+					onClick={() => setPage(3)}
+				>
+					Payment
+				</button>
+			</div>
+			<div className="flex justify-center items-center">
+				<div>
+					{page !== 1 && (
+						<button
+							onClick={prevPage}
+							className="bg-white text-custom-black py-2 px-1 text-2xl shadow-md rounded-lg"
+						>
+							<GrPrevious />
+						</button>
+					)}
 				</div>
 				<div>
-					<div className="border shadow p-4 rounded-xl mb-8">
-						<h1 className="text-xl font-semibold mb-4 text-center">
-							Order Summary
-						</h1>
-						<div className="bg-gray-200 rounded-xl p-4">
-							<h1 className="text-lg font-semibold mb-2">Cart Items</h1>
-							<h2 className="text-sm text-yellow-700 mb-1">
-								Total No Of Items: {products ? products.NoOfItems : 0}
-							</h2>
-							<h2 className="text-sm text-yellow-700">
-								Total Cost:Rs. {products ? products.TotalCost : 0}
-							</h2>
-						</div>
-					</div>
-					<form
-						onSubmit={handleSubmit}
-						className="bg-white p-8 rounded-xl shadow-md"
-					>
-						<div className="mb-4">
-							<label
-								htmlFor="name"
-								className="block text-gray-700 font-semibold mb-2"
-							>
-								Name:
-							</label>
-							<input
-								className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-								type="text"
-								id="name"
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-								required
-							/>
-						</div>
-						<div className="mb-4">
-							<label
-								htmlFor="email"
-								className="block text-gray-700 font-semibold mb-2"
-							>
-								Email:
-							</label>
-							<input
-								className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-								type="email"
-								id="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								required
-							/>
-						</div>
-						<div className="mb-4">
-							<label
-								htmlFor="phone"
-								className="block text-gray-700 font-semibold mb-2"
-							>
-								Phone:
-							</label>
-							<input
-								className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-								type="text"
-								id="phone"
-								value={phone}
-								onChange={(e) => setPhone(e.target.value)}
-								required
-							/>
-						</div>
-						{error && <p className="text-red-500 mb-4">{error}</p>}
-						<div className="flex justify-center">
-							<button
-								type="submit"
-								className="bg-gray-800 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl focus:outline-none focus:shadow-outline"
-							>
-								Proceed To Payment
-							</button>
-						</div>
-					</form>
+					{page === 1 && <Summary products={products} />}
+					{page === 2 && <Address />}
+					{page === 3 && <Payment amount={amount} id={products._id} />}
+				</div>
+				<div>
+					{page !== 3 ? (
+						<button
+							onClick={nextPage}
+							className="bg-white text-custom-black py-2 px-1 text-2xl shadow-md rounded-lg"
+						>
+							<GrNext />
+						</button>
+					) : (
+						<button
+							className="bg-white text-custom-black py-2 px-1 text-2xl shadow-md rounded-lg"
+							disabled
+						>
+							<GrNext />
+						</button>
+					)}
 				</div>
 			</div>
 		</div>

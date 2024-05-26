@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/util/db";
 import { User } from "@/util/model/User";
 import { Cart } from "@/util/model/Cart";
+import { Shipping } from "@/util/model/Shipping";
 import bcryptjs from "bcryptjs";
 
 export default async function handler(req, res) {
@@ -8,11 +9,11 @@ export default async function handler(req, res) {
 		try {
 			await connectToDatabase();
 
-			const { username, password, email } = req.body;
+			const { username, password, email, phone } = req.body;
 
-			if (!username || !email || !password) {
+			if (!username || !email || !password || !phone) {
 				return res.status(400).json({
-					error: "Username,email and password are required",
+					error: "Username,email,phone and password are required",
 				});
 			}
 
@@ -34,6 +35,7 @@ export default async function handler(req, res) {
 				username,
 				email,
 				password: hashedPassword,
+				phone,
 			});
 
 			await newUser.save();
@@ -43,6 +45,17 @@ export default async function handler(req, res) {
 				items: [],
 			});
 			await newCart.save();
+			const newShipping = new Shipping({
+				user: newUser._id,
+				name: username,
+				email: email,
+				phone: phone,
+				province: "Bagmati",
+				city: "Kathmandu",
+				area: "Newroad",
+				street: "Sundhara",
+			});
+			await newShipping.save();
 
 			return res.status(201).json({ message: "User registered successfully" });
 		} catch (error) {

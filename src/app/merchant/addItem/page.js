@@ -13,11 +13,13 @@ export default function CreateProduct() {
 		category: "",
 		artist: "",
 	};
+	const [options, setOptions] = useState([]);
 	const [formData, setFormData] = useState(initialState);
 	const [token, setToken] = useState(null);
 	const router = useRouter();
 	const [errors, setErrors] = useState({});
 	const [error, setError] = useState("");
+
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const storedToken = localStorage.getItem("merchantToken");
@@ -30,6 +32,33 @@ export default function CreateProduct() {
 			}
 		}
 	}, []);
+
+	useEffect(() => {
+		if (token) {
+			fetchData();
+		}
+	}, [token]);
+
+	const fetchData = async () => {
+		try {
+			const res = await fetch("/api/merchant/category", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			if (res.ok) {
+				const data = await res.json();
+				const categories = data.map((category) => category.categoryName); // Extracting categoryName from data
+				setOptions(categories); // Set the fetched category names to the options state
+			} else {
+				const error = await res.json();
+				console.log(error.error);
+			}
+		} catch (error) {
+			console.error("Error fetching categories:", error);
+		}
+	};
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -91,6 +120,7 @@ export default function CreateProduct() {
 			setErrors(validationErrors);
 		}
 	};
+
 	const validateForm = (data) => {
 		let errors = {};
 		for (let field in data) {
@@ -185,11 +215,12 @@ export default function CreateProduct() {
 								className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-custom-orange focus:ring focus:ring-custom-orange focus:ring-opacity-50"
 							>
 								<option>--Select--</option>
-								<option value="acrylic">Acrylic Painting</option>
-								<option value="watercolor">Watercolor Painting</option>
-								<option value="mandala">Mandala Art</option>
-								<option value="digital">Digital Art</option>
-								<option value="craft">Crafts</option>
+								{options &&
+									options.map((option, index) => (
+										<option key={index} value={option}>
+											{option}
+										</option>
+									))}
 							</select>
 							{errors.category && (
 								<div className="text-red-600">{errors.category}</div>

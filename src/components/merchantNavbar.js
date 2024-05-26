@@ -36,7 +36,7 @@ export default function MerchantNavbar() {
 			</div>
 			<nav className="bg-white w-full py-1 px-4 flex justify-between items-center shadow-md">
 				<div className="">
-					<Link href="/">
+					<Link href="/merchant">
 						<img src="/img/Logo.png" alt="Logo" className="h-20" />
 					</Link>
 				</div>
@@ -51,6 +51,17 @@ export default function MerchantNavbar() {
 						<Link href="/merchant/addItem">
 							<li className="text-custom-black hover:text-gray-300">
 								Add Artwork
+							</li>
+						</Link>
+						<Link href="/merchant/addCategory">
+							<li className="text-custom-black mx-4 hover:text-gray-300 ">
+								Add Category
+							</li>
+						</Link>
+
+						<Link href="/merchant/viewCategories">
+							<li className="text-custom-black hover:text-gray-300">
+								View Categories
 							</li>
 						</Link>
 					</ul>
