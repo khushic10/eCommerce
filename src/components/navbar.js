@@ -42,11 +42,7 @@ export default function Navbar() {
 			<nav className="bg-white w-full py-1 px-4 flex justify-between items-center shadow-md sm:px-2">
 				<div className="">
 					<Link href="/">
-						<img
-							src="http://localhost:3000/img/Logo.png"
-							alt="Logo"
-							className="h-20"
-						/>
+						<img src="/img/Logo.png" alt="Logo" className="h-20" />
 					</Link>
 				</div>
 				<div className="flex-grow flex justify-center">

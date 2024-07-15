@@ -106,9 +106,7 @@ export default async function handler(req, res) {
 			);
 
 			// Construct image URL
-			const image = `http://localhost:3000/images/${path.basename(
-				outputImagePath
-			)}`;
+			const image = `/images/${path.basename(outputImagePath)}`;
 
 			// Create new Product instance and save to database
 			const product = new Product({
