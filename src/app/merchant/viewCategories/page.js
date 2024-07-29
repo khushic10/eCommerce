@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function page() {
+export default function Page() {
 	const [categories, setCategories] = useState([]);
 	const [token, setToken] = useState("");
 	const router = useRouter();

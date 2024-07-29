@@ -122,7 +122,7 @@ export default function Login() {
 						</button>
 					</div>
 					<div className="text-center text-custom-black">
-						Don't have an account yet?{" "}
+						No account yet?{" "}
 						<Link href="/register">
 							<span className="cursor-pointer text-custom-black font-semibold">
 								Sign Up
