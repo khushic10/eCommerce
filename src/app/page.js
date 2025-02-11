@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
+	//comment
 	const [products, setProducts] = useState([]);
 	const [searchKey, setSearchKey] = useState("");
 	const [searchError, setSearchError] = useState("");
