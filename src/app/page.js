@@ -112,45 +112,46 @@ export default function Home() {
 				</div>
 				<div className="container mx-auto">
 					<div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 md:gap-4 sm:gap-2">
-						{products.map((product) => (
-							<div className=" h-96" key={product._id}>
-								<Link href={`/${product._id}`}>
-									<div className=" h-72">
-										<img
-											className=" rounded-2xl h-full w-full sm:mt-2"
-											src={product.image}
-											alt=""
-										/>
-									</div>
-								</Link>
-								<div className="md:flex justify-between ml-2 mr-2 mt-0.5">
-									<div>
-										<div className="text-sm text-custom-red font-serif">
-											Category:
-											<span className="text-custom-orange ml-2">
-												{product.category}
-											</span>
+						{products &&
+							products.map((product) => (
+								<div className=" h-96" key={product._id}>
+									<Link href={`/${product._id}`}>
+										<div className=" h-72">
+											<img
+												className=" rounded-2xl h-full w-full sm:mt-2"
+												src={product.image}
+												alt=""
+											/>
 										</div>
-										<h2 className=" text-custom-brown text-sm">
-											{product.name}
-										</h2>
-										<p className="flex justify-start items-start text-sm font-bold text-gray-500">
-											<span className=" text-xs mr-1 font-semibold">
-												Price:
-											</span>{" "}
-											Rs.
-											{product.price}
-										</p>
+									</Link>
+									<div className="md:flex justify-between ml-2 mr-2 mt-0.5">
+										<div>
+											<div className="text-sm text-custom-red font-serif">
+												Category:
+												<span className="text-custom-orange ml-2">
+													{product.category}
+												</span>
+											</div>
+											<h2 className=" text-custom-brown text-sm">
+												{product.name}
+											</h2>
+											<p className="flex justify-start items-start text-sm font-bold text-gray-500">
+												<span className=" text-xs mr-1 font-semibold">
+													Price:
+												</span>{" "}
+												Rs.
+												{product.price}
+											</p>
+										</div>
+										<button
+											className="bg-custom-orange font-sans text-custom-gray text-sm py-1 px-2 my-2 rounded-lg h-1/2 font-medium "
+											onClick={() => addCart(product._id)}
+										>
+											Add To Cart
+										</button>
 									</div>
-									<button
-										className="bg-custom-orange font-sans text-custom-gray text-sm py-1 px-2 my-2 rounded-lg h-1/2 font-medium "
-										onClick={() => addCart(product._id)}
-									>
-										Add To Cart
-									</button>
 								</div>
-							</div>
-						))}
+							))}
 					</div>
 				</div>
 			</div>
